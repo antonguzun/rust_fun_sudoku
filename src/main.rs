@@ -34,8 +34,12 @@ impl SudokuTable {
         }
         string_data
     }
-    fn set_value(&mut self, value: u8, position: &Position) {
-        self.array[position.x][position.y] = value;
+    fn set_value(&mut self, value: String, position: &Position) {
+        let parsing_result = value.trim().parse();
+        match parsing_result {
+            Ok(0..=9) => self.array[position.x][position.y] = parsing_result.unwrap(),
+            _ => {}
+        }
     }
 }
 
@@ -89,10 +93,9 @@ fn main() {
             119 => &position.move_top(),
             115 => &position.move_bottom(),
             10 => &{
-                let char_code = getch();
-                println!("char_code {}", char_code);
-                println!("char {:?}", char::from_digit(char_code as u32, 10));
-                &table.set_value(9 as u8, &position);
+                let mut input_string = String::new();
+                getstr(&mut input_string);
+                &table.set_value(input_string, &position);
             },
             _ => &{},
         };
